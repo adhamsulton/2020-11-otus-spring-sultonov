@@ -1,46 +1,35 @@
 package ru.otus.homework1.service;
 
-import ru.otus.homework1.Homework1Application;
-import ru.otus.homework1.config.DataSource;
+import ru.otus.homework1.dao.QuestionDao;
 import ru.otus.homework1.domain.Answer;
 import ru.otus.homework1.domain.Question;
-import ru.otus.homework1.util.CsvParser;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class QuestionServiceImpl implements QuestionService {
-    private final DataSource dataSource;
-    private final CsvParser csvParser;
+    private final QuestionDao questionDao;
+    private final PrintService printService;
 
-    public QuestionServiceImpl(DataSource dataSource, CsvParser csvParser) {
-        this.dataSource = dataSource;
-        this.csvParser = csvParser;
+    public QuestionServiceImpl(QuestionDao questionDao, PrintService printService) {
+        this.questionDao = questionDao;
+        this.printService = printService;
     }
 
     @Override
     public void printQuestions() {
-        InputStream resourceAsStream = Homework1Application.class.getClassLoader().getResourceAsStream(dataSource.getFileName());
-        if (resourceAsStream == null) {
-            System.out.println("The corresponding test file was not found in the resources.");
-            return;
+        List<Question> questionList = null;
+        try {
+            questionList = questionDao.getQuestionList();
+        } catch (Exception e) {
+            printService.print(e.getMessage());
         }
 
-        Scanner scanner = new Scanner(resourceAsStream);
-        List<Question> questionList = new ArrayList<>();
+        printService.print("Welcome to testing!");
 
-        while (scanner.hasNext()) {
-            String line = scanner.nextLine();
-            questionList.add(csvParser.parse(line));
-        }
-
-        System.out.println("Welcome to testing!");
         for (Question question : questionList) {
-            System.out.println(question.getQuestionText());
+            printService.print(question.getQuestionText());
             for (Answer answer : question.getAnswerList()) {
-                System.out.println(answer.getAnswerText());
+                printService.print(answer.getAnswerText());
             }
         }
     }
