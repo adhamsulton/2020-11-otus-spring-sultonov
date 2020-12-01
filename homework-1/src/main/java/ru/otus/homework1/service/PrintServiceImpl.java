@@ -7,7 +7,6 @@ public class PrintServiceImpl implements PrintService {
 
     public PrintServiceImpl(PrintStream printStream) {
         this.printStream = printStream;
-//        this.printStream = System.out; Так работает. Но я не знаю как это инжектить в контексте
     }
 
     @Override
