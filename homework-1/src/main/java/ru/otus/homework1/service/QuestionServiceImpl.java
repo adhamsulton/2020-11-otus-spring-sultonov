@@ -4,6 +4,7 @@ import ru.otus.homework1.dao.QuestionDao;
 import ru.otus.homework1.domain.Answer;
 import ru.otus.homework1.domain.Question;
 
+import java.io.IOException;
 import java.util.List;
 
 public class QuestionServiceImpl implements QuestionService {
@@ -20,8 +21,8 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questionList = null;
         try {
             questionList = questionDao.getQuestionList();
-        } catch (Exception e) {
-            printService.print(e.getMessage());
+        } catch (IOException e) {
+            printService.print("The corresponding test file was not found in the resources.");
         }
 
         printService.print("Welcome to testing!");
