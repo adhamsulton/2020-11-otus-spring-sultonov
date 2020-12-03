@@ -5,6 +5,7 @@ import ru.otus.homework1.domain.Question;
 import ru.otus.homework1.exception.QuestionsReadingException;
 import ru.otus.homework1.util.CsvParser;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public List<Question> getQuestionList() throws Exception {
+    public List<Question> getQuestionList() throws QuestionsReadingException {
         List<Question> questionList = new ArrayList<>();
         try (InputStream resourceAsStream = QuestionDaoImpl.class.getClassLoader().getResourceAsStream(dataSource.getFileName())) {
             if (resourceAsStream == null) {
@@ -33,6 +34,8 @@ public class QuestionDaoImpl implements QuestionDao {
                     questionList.add(csvParser.parse(line));
                 }
             }
+        } catch (IOException e) {
+            throw new QuestionsReadingException("error reading file", e);
         }
 
         return questionList;

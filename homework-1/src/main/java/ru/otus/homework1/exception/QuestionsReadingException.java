@@ -7,4 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class QuestionsReadingException extends Exception {
     private String message;
+    private Exception originalException;
+
+    public QuestionsReadingException(String message) {
+        super(message);
+    }
 }
