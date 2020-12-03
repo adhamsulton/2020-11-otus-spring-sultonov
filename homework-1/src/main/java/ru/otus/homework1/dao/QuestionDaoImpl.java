@@ -2,10 +2,9 @@ package ru.otus.homework1.dao;
 
 import ru.otus.homework1.config.DataSource;
 import ru.otus.homework1.domain.Question;
+import ru.otus.homework1.exception.QuestionsReadingException;
 import ru.otus.homework1.util.CsvParser;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,11 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public List<Question> getQuestionList() throws IOException {
+    public List<Question> getQuestionList() throws Exception {
         List<Question> questionList = new ArrayList<>();
         try (InputStream resourceAsStream = QuestionDaoImpl.class.getClassLoader().getResourceAsStream(dataSource.getFileName())) {
             if (resourceAsStream == null) {
-                throw new FileNotFoundException();
+                throw new QuestionsReadingException("file not found");
             }
 
             try (Scanner scanner = new Scanner(resourceAsStream)) {

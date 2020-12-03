@@ -3,8 +3,8 @@ package ru.otus.homework1.service;
 import ru.otus.homework1.dao.QuestionDao;
 import ru.otus.homework1.domain.Answer;
 import ru.otus.homework1.domain.Question;
+import ru.otus.homework1.exception.QuestionsReadingException;
 
-import java.io.IOException;
 import java.util.List;
 
 public class QuestionServiceImpl implements QuestionService {
@@ -21,8 +21,10 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questionList = null;
         try {
             questionList = questionDao.getQuestionList();
-        } catch (IOException e) {
+        } catch (QuestionsReadingException e) {
             printService.print("The corresponding test file was not found in the resources.");
+        } catch (Exception ex) {
+            printService.print("Unexpected error by getting resource");
         }
 
         printService.print("Welcome to testing!");
