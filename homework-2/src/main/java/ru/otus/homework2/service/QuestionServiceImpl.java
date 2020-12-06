@@ -25,20 +25,46 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void runTest() {
+        List<Question> questionList = getQuestions();
+        if (questionList == null) return;
+
+        String userFullName = getUserFullName();
+
+        int userResult = getUserResult(questionList);
+
+        viewTestingResult(userFullName, userResult);
+    }
+
+    private List<Question> getQuestions() {
         List<Question> questionList = null;
         try {
             questionList = questionDao.getQuestionList();
         } catch (QuestionsReadingException e) {
             readWriteService.print("The corresponding test file was not found in the resources.");
+            return null;
         } catch (Exception ex) {
             readWriteService.print("Unexpected error by getting resource");
+            return null;
         }
-        shuffleAnswers(questionList);
 
+        shuffleAnswers(questionList);
+        return questionList;
+    }
+
+    private void shuffleAnswers(List<Question> questionList) {
+        questionList.forEach(question -> {
+            Collections.shuffle(question.getAnswerList());
+        });
+    }
+
+    private String getUserFullName() {
         readWriteService.print("Please, enter your full name");
         String userFullName = readWriteService.read();
         readWriteService.print("Welcome to testing " + userFullName);
+        return userFullName;
+    }
 
+    private int getUserResult(List<Question> questionList) {
         int userResult = 0;
         for (Question question : questionList) {
             List<Answer> answerList = question.getAnswerList();
@@ -53,17 +79,15 @@ public class QuestionServiceImpl implements QuestionService {
                 userResult++;
             }
         }
+        return userResult;
+    }
+
+    private void viewTestingResult(String userFullName, int userResult) {
         if (userResult >= passMark) {
             readWriteService.print("Congrats, " + userFullName + " you're passed test");
         } else {
             readWriteService.print("Sorry, " + userFullName + " you can't pass test");
         }
         readWriteService.print("Your score: " + userResult);
-    }
-
-    private void shuffleAnswers(List<Question> questionList) {
-        questionList.forEach(question -> {
-            Collections.shuffle(question.getAnswerList());
-        });
     }
 }
