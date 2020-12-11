@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserFullName() {
+    public User getUser() {
         readWriteService.print("Please, enter your full name");
         return new User(readWriteService.read());
     }

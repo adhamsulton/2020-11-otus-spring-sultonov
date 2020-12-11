@@ -31,7 +31,7 @@ public class QuestionServiceImpl implements QuestionService {
     public void runTest() {
         List<Question> questionList = getQuestions();
 
-        User user = userService.getUserFullName();
+        User user = userService.getUser();
         if (user == null) return;
 
         readWriteService.print("Welcome to testing " + user.getFullName());
