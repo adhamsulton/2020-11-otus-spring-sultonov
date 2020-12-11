@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.homework2.domain.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,8 +24,12 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserFullName() {
-//        when(userService.getUser()).thenReturn(new User("Ivan"));
-//        assertEquals(userService.getUser().getFullName(),"Ivan");
+    void getUser() {
+        String expectedUser = "Ivan";
+        when(readWriteService.read()).thenReturn(expectedUser);
+        User user = userService.getUser();
+
+        assertNotNull(user);
+        assertEquals(expectedUser, user.getFullName());
     }
 }
