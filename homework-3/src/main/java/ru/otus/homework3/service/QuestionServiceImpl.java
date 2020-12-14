@@ -1,7 +1,5 @@
 package ru.otus.homework3.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.otus.homework3.config.AppProps;
 import ru.otus.homework3.dao.QuestionDao;
@@ -19,18 +17,16 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
     private final UserService userService;
     private final ReadWriteService readWriteService;
-    private final MessageSource messageSource;
+    private final LocaleReadWriteService localeReadWriteService;
     private final AppProps props;
-    private final int passMark;
 
     public QuestionServiceImpl(QuestionDao questionDao, UserService userService, ReadWriteService readWriteService,
-                               MessageSource messageSource, AppProps props, @Value("${pass-mark}") int passMark) {
+                               LocaleReadWriteService localeReadWriteService, AppProps props) {
         this.questionDao = questionDao;
         this.userService = userService;
         this.readWriteService = readWriteService;
-        this.messageSource = messageSource;
+        this.localeReadWriteService = localeReadWriteService;
         this.props = props;
-        this.passMark = passMark;
     }
 
     @Override
@@ -40,9 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
         User user = userService.getUser();
         if (user == null) return;
 
-        String welcome = messageSource.getMessage("welcome-test", new String[]{user.getFullName()}, props.getLocale());
-
-        readWriteService.print(welcome);
+        localeReadWriteService.printLocale("welcome-test", user.getFullName());
 
         int userResult = getUserResult(questionList);
 
@@ -54,10 +48,10 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             questionList = questionDao.getQuestionList();
         } catch (QuestionsReadingException e) {
-            readWriteService.print(messageSource.getMessage("file-not-found", new String[]{}, props.getLocale()));
+            localeReadWriteService.printLocale("file-not-found");
             return new ArrayList<>();
         } catch (Exception ex) {
-            readWriteService.print(messageSource.getMessage("resource-error", new String[]{}, props.getLocale()));
+            localeReadWriteService.printLocale("resource-error");
             return new ArrayList<>();
         }
 
@@ -90,11 +84,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private void viewTestingResult(User user, int userResult) {
-        if (userResult >= passMark) {
-            readWriteService.print(messageSource.getMessage("congrats", new String[]{user.getFullName()}, props.getLocale()));
+        if (userResult >= props.getPassMark()) {
+            localeReadWriteService.printLocale("congrats", user.getFullName());
         } else {
-            readWriteService.print(messageSource.getMessage("sorry", new String[]{user.getFullName()}, props.getLocale()));
+            localeReadWriteService.printLocale("sorry", user.getFullName());
         }
-        readWriteService.print(messageSource.getMessage("score", new String[]{String.valueOf(userResult)}, props.getLocale()));
+        localeReadWriteService.printLocale("score", String.valueOf(userResult));
     }
 }

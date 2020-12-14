@@ -11,4 +11,6 @@ import java.util.Locale;
 @ConfigurationProperties(prefix = "application")
 public class AppProps {
     private Locale locale;
+    private String csvFileName;
+    private Integer passMark;
 }

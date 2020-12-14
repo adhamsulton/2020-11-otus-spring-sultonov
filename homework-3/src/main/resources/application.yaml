@@ -1,5 +1,8 @@
-csv-filename_en_US: test_en_US.csv
-csv-filename_ru_RU: test_ru_RU.csv
-pass-mark: 3
 application:
-  locale: en_US
+  csv-file-name: test.csv
+  pass-mark: 3
+  locale: ru
+spring:
+  messages:
+    basename: messages
+    encoding: UTF-8
