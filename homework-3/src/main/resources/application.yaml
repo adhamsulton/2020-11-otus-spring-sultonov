@@ -1,0 +1,8 @@
+application:
+  csv-file-name: test.csv
+  pass-mark: 3
+  locale: ru
+spring:
+  messages:
+    basename: messages
+    encoding: UTF-8
