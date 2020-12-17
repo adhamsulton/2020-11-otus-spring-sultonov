@@ -1,7 +1,7 @@
 application:
   csv-file-name: test.csv
   pass-mark: 3
-  locale: ru
+  locale: en
 spring:
   messages:
     basename: messages
