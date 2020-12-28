@@ -1,4 +1,4 @@
-package ru.otus.homework5.domain;
+package ru.otus.homework5.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class BookAuthors {
     private Long bookId;
     private Long authorId;
+    private String authorName;
 }

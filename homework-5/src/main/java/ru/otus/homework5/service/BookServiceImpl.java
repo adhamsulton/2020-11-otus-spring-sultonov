@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.homework5.dao.BookDao;
 import ru.otus.homework5.domain.Book;
+import ru.otus.homework5.dto.BookDto;
 
 import java.util.List;
 
@@ -18,19 +19,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book findById(Long id) {
-        return bookDao.findById(id);
+    public Book findById(Long id) throws Exception {
+        return bookDao.findById(id).orElseThrow(() -> new Exception("Book not found"));
     }
 
     @Override
     public void create(String name, Long genreId, List<Long> authorIdList) {
-        Book book = Book.builder().name(name).genreId(genreId).authorIds(authorIdList).build();
-        bookDao.create(book);
+        BookDto bookDto = BookDto.builder().name(name).genreId(genreId).authorIds(authorIdList).build();
+        bookDao.create(bookDto);
     }
 
     @Override
     public void update(Long id, String name, Long genreId, List<Long> authorIdList) {
-        Book book = Book.builder().id(id).name(name).genreId(genreId).authorIds(authorIdList).build();
+        BookDto book = BookDto.builder().id(id).name(name).genreId(genreId).authorIds(authorIdList).build();
 
         bookDao.update(book);
     }

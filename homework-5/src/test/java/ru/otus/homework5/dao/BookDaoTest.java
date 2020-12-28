@@ -5,11 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.annotation.DirtiesContext;
+import ru.otus.homework5.domain.Author;
 import ru.otus.homework5.domain.Book;
+import ru.otus.homework5.domain.Genre;
+import ru.otus.homework5.dto.BookDto;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("Dao для работы с книгами должно")
 @JdbcTest
 @Import(BookDaoImpl.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class BookDaoTest {
 
     @Autowired
@@ -26,7 +28,9 @@ class BookDaoTest {
     @DisplayName("найти все книги")
     @Test
     void findAll() {
-        var expectedBookList = List.of(new Book(1L, "Затерянный мир", List.of(2L), 1L), new Book(2L, "Темная башня", List.of(1L), 2L));
+        var expectedBookList = List.of(
+                new Book(1L, "Затерянный мир", List.of(new Author(2L, "Артур Конан Дойл")), new Genre(1L, "Детектив")),
+                new Book(2L, "Темная башня", List.of(new Author(1L, "Стивен Кинг")), new Genre(2L, "Роман")));
         var actualBookList = bookDao.findAll();
 
         assertThat(actualBookList).containsExactlyInAnyOrderElementsOf(expectedBookList);
@@ -35,30 +39,48 @@ class BookDaoTest {
     @DisplayName("найти книгу по Ид")
     @Test
     void findById() {
-        Book expectedBook = new Book(1L, "Затерянный мир", List.of(2L), 1L);
+        Book expectedBook = new Book(1L, "Затерянный мир", List.of(new Author(2L, "Артур Конан Дойл")), new Genre(1L, "Детектив"));
 
-        var actualBook = bookDao.findById(expectedBook.getId());
+        var actualBook = bookDao.findById(expectedBook.getId()).get();
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
     @DisplayName("добавить в Бд новую книгу")
     @Test
     void create() {
-        Book expectedBook = new Book(3L, "myBook", List.of(1L, 2L), 1L);
-        bookDao.create(expectedBook);
+        Book expectedBook = new Book(3L, "myBook",
+                List.of(new Author(2L, "Артур Конан Дойл"), new Author(1L, "Стивен Кинг")),
+                new Genre(1L, "Детектив"));
 
-        var actualBook = bookDao.findById(expectedBook.getId());
-        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
+        BookDto bookDto = new BookDto(
+                expectedBook.getId(),
+                expectedBook.getName(),
+                expectedBook.getAuthorList().stream().map(Author::getId).collect(Collectors.toList()),
+                expectedBook.getGenre().getId());
+
+        bookDao.create(bookDto);
+
+        var actualBook = bookDao.findById(expectedBook.getId()).get();
+        assertThat(actualBook).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedBook);
     }
 
     @DisplayName("изменить книгу")
     @Test
     void update() {
-        Book expectedBook = new Book(1L, "new name", List.of(1L), 2L);
-        bookDao.update(expectedBook);
+        Book expectedBook = new Book(1L, "new name",
+                List.of(new Author(1L, "Стивен Кинг")),
+                new Genre(2L, "Роман"));
 
-        var actualBook = bookDao.findById(expectedBook.getId());
-        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
+        BookDto bookDto = new BookDto(
+                expectedBook.getId(),
+                expectedBook.getName(),
+                expectedBook.getAuthorList().stream().map(Author::getId).collect(Collectors.toList()),
+                expectedBook.getGenre().getId());
+
+        bookDao.update(bookDto);
+
+        var actualBook = bookDao.findById(expectedBook.getId()).get();
+        assertThat(actualBook).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedBook);
     }
 
     @DisplayName("удалить книгу")
@@ -68,7 +90,7 @@ class BookDaoTest {
 
         bookDao.delete(bookId);
 
-        assertThatThrownBy(() -> bookDao.findById(bookId))
-                .isInstanceOf(EmptyResultDataAccessException.class);
+        assertThatThrownBy(() -> bookDao.findById(bookId).get())
+                .isInstanceOf(NoSuchElementException.class);
     }
 }

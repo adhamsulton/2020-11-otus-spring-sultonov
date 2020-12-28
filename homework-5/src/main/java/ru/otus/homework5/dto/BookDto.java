@@ -1,4 +1,4 @@
-package ru.otus.homework5.domain;
+package ru.otus.homework5.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class BookDto {
     private Long id;
     private String name;
-    private List<Author> authorList;
-    private Genre genre;
+    private List<Long> authorIds;
+    private Long genreId;
 }

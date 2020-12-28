@@ -23,7 +23,7 @@ public class ApplicationEventsCommands {
     }
 
     @ShellMethod(value = "Find book by Id command", key = {"fi", "fbi"})
-    public String findBookById(@ShellOption Long id) {
+    public String findBookById(@ShellOption Long id) throws Exception {
         Book book = bookService.findById(id);
         return book.toString();
     }
