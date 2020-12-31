@@ -1,6 +1,8 @@
 package ru.otus.homework5.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,6 +13,8 @@ import ru.otus.homework5.domain.Book;
 import ru.otus.homework5.domain.Genre;
 import ru.otus.homework5.dto.BookDto;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,11 +30,7 @@ public class BookDaoImpl implements BookDao {
     public List<Book> findAll() {
         final String query = "select t.id, t.name, t.genre_id, (select w.name from genres w where w.id = t.genre_id) genre_name from books t";
 
-        List<Book> bookList = jdbcTemplate.query(query, (rs, i) -> Book.builder()
-                .id(rs.getLong("id"))
-                .name(rs.getString("name"))
-                .genre(new Genre(rs.getLong("genre_id"), rs.getString("genre_name")))
-                .build());
+        List<Book> bookList = jdbcTemplate.query(query, new BookMapper());
 
         List<BookAuthors> bookAuthors = getAllBookAuthors();
 
@@ -60,37 +60,36 @@ public class BookDaoImpl implements BookDao {
     }
 
     public Optional<Book> findById(Long id) {
-        String query = "select t.id, t.name, t.genre_id, k.name genre_name from books t join genres k on k.id = t.genre_id where t.id = :id";
+        final String query = "select t.id, t.name, t.genre_id, k.name genre_name from books t join genres k on k.id = t.genre_id where t.id = :id";
 
         Book book = null;
         try {
-            book = jdbcTemplate.queryForObject(query, Map.of("id", id),
-                    (rs, i) -> Book.builder()
-                            .id(rs.getLong("id"))
-                            .name(rs.getString("name"))
-                            .genre(new Genre(rs.getLong("genre_id"), rs.getString("genre_name")))
-                            .build());
-        } catch (Exception e) {
+            book = jdbcTemplate.queryForObject(query, Map.of("id", id), new BookMapper());
+        } catch (EmptyResultDataAccessException e) {
             return Optional.ofNullable(book);
         }
 
-        query = "select t.author_id, k.full_name author_name from book_authors t join authors k on k.id = t.author_id where t.book_id = :id";
-
-        List<Author> authorList = jdbcTemplate.query(query, Map.of("id", id),
-                (rs, i) -> Author.builder()
-                        .id(rs.getLong("author_id"))
-                        .fullName(rs.getString("author_name"))
-                        .build());
+        List<Author> authorList = getAuthors(id);
 
         book.setAuthorList(authorList);
 
         return Optional.ofNullable(book);
     }
 
+    private List<Author> getAuthors(Long bookId) {
+        final String query = "select t.author_id, k.full_name author_name from book_authors t join authors k on k.id = t.author_id where t.book_id = :id";
+
+        return jdbcTemplate.query(query, Map.of("id", bookId),
+                (rs, i) -> Author.builder()
+                        .id(rs.getLong("author_id"))
+                        .fullName(rs.getString("author_name"))
+                        .build());
+    }
+
     public void create(BookDto book) {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        String query = "insert into books(name, genre_id) " +
+        final String query = "insert into books(name, genre_id) " +
                 " values (:name, :genre_id)";
 
         jdbcTemplate.update(query, new MapSqlParameterSource()
@@ -101,7 +100,11 @@ public class BookDaoImpl implements BookDao {
 
         Long bookId = (Long) keyHolder.getKey();
 
-        query = "insert into book_authors (book_id, author_id) values (:book_id, :author_id)";
+        insertBookAuthors(book, bookId);
+    }
+
+    private void insertBookAuthors(BookDto book, Long bookId) {
+        final String query = "insert into book_authors (book_id, author_id) values (:book_id, :author_id)";
 
         MapSqlParameterSource[] paramsList = book.getAuthorIds()
                 .stream()
@@ -122,21 +125,27 @@ public class BookDaoImpl implements BookDao {
                         "where t.id = :id",
                 Map.of("id", book.getId(), "name", book.getName(), "genre_id", book.getGenreId()));
 
+        deleteAllBookAuthors(book);
+
+        insertBookAuthors(book, book.getId());
+    }
+
+    private void deleteAllBookAuthors(BookDto book) {
         jdbcTemplate.update("delete book_authors where book_id = :book_id", Map.of("book_id", book.getId()));
-
-        MapSqlParameterSource[] paramsList = book.getAuthorIds()
-                .stream()
-                .map(authorId -> new MapSqlParameterSource()
-                        .addValue("book_id", book.getId())
-                        .addValue("author_id", authorId)
-                )
-                .toArray(MapSqlParameterSource[]::new);
-
-        jdbcTemplate.batchUpdate("insert into book_authors (book_id, author_id) values (:book_id, :author_id)",
-                paramsList);
     }
 
     public void delete(Long bookId) {
         jdbcTemplate.update("delete books where id = :id", Map.of("id", bookId));
+    }
+
+    private static class BookMapper implements RowMapper<Book> {
+        @Override
+        public Book mapRow(ResultSet rs, int i) throws SQLException {
+            return Book.builder()
+                    .id(rs.getLong("id"))
+                    .name(rs.getString("name"))
+                    .genre(new Genre(rs.getLong("genre_id"), rs.getString("genre_name")))
+                    .build();
+        }
     }
 }
