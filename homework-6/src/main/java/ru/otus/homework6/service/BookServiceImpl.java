@@ -12,22 +12,24 @@ import ru.otus.homework6.repository.BookRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository repository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Book> findAll() {
         return repository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Book findById(Long id) throws Exception {
         return repository.findById(id).orElseThrow(() -> new Exception("Book not found"));
     }
 
+    @Transactional
     @Override
     public void save(BookDto bookDto) {
         repository.save(Book.builder()
@@ -38,6 +40,7 @@ public class BookServiceImpl implements BookService {
                 .build());
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         repository.delete(id);

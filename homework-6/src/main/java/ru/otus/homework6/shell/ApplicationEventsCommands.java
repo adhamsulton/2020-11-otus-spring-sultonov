@@ -70,6 +70,11 @@ public class ApplicationEventsCommands {
         return "Book deleted";
     }
 
+    @ShellMethod(value = "Find all book comments command", key = {"fc", "find-all-comment"})
+    public String findAllBookComment(@ShellOption Long bookId) {
+        return commentService.findAllBookComments(bookId).toString();
+    }
+
     @ShellMethod(value = "Create new comment command", key = {"cc", "create-comment"})
     public String createComment(@ShellOption Long bookId, String text) throws Exception {
         commentService.create(CommentDto.builder()

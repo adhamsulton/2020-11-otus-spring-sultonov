@@ -16,8 +16,9 @@ public class CommentRepositoryJpa implements CommentRepository {
     private EntityManager em;
 
     @Override
-    public List<Comment> findAll() {
-        TypedQuery<Comment> typedQuery = em.createQuery("select s from Comment s", Comment.class);
+    public List<Comment> findAllByBookId(Long bookId) {
+        TypedQuery<Comment> typedQuery = em.createQuery("select s from Comment s where s.book.id = :bookId", Comment.class);
+        typedQuery.setParameter("bookId", bookId);
         return typedQuery.getResultList();
     }
 

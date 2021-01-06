@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "book_comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "BOOK_COMMENTS_SQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOOK_COMMENTS_SQ")
+    @SequenceGenerator(name = "BOOK_COMMENTS_SQ", sequenceName = "BOOK_COMMENTS_SQ", allocationSize = 1)
     private Long id;
     private String text;
     private LocalDateTime createdOn;

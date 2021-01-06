@@ -1,10 +1,6 @@
 package ru.otus.homework6.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -19,7 +15,8 @@ import java.util.List;
 @Table(name = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "BOOKS_SQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOOKS_SQ")
+    @SequenceGenerator(name = "BOOKS_SQ", sequenceName = "BOOKS_SQ", allocationSize = 1)
     private Long id;
     private String name;
     @Fetch(FetchMode.SUBSELECT)
@@ -27,13 +24,20 @@ public class Book {
     @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authorList;
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "genre_id")
     private Genre genre;
+    @ToString.Exclude
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> commentList;
 
-    public Book(Long bookId) {
+    public Book(Long id, String name, List<Author> authorList, Genre genre) {
+        this.id = id;
+        this.name = name;
+        this.authorList = authorList;
+        this.genre = genre;
     }
+
 }
