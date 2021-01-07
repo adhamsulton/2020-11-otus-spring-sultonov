@@ -25,12 +25,12 @@ class CommentRepositoryJpaTest {
     private static final long BOOK_ID = 2L;
     private static final int EXPECTED_NUMBER_OF_COMMENTS = 1;
     private static final long EXPECTED_QUERIES_COUNT = 3L;
-    public static final long COMMENT_ID = 1L;
+    private static final long COMMENT_ID = 1L;
 
     @Autowired
-    CommentRepository repositoryJpa;
+    private CommentRepository repositoryJpa;
     @Autowired
-    TestEntityManager em;
+    private TestEntityManager em;
 
     @DisplayName("найти все комментарии")
     @Test
