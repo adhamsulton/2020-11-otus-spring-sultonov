@@ -1,5 +1,6 @@
 package ru.otus.homework8.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Mongo репозиторий для работы с книгами должен")
 @DataMongoTest
 class BookRepositoryTest {
-    private static final String BOOK_ID = "2";
+    private static final String BOOK_ID = "1";
 
     @Autowired
     private BookRepository repository;
     @Autowired
     private MongoTemplate mt;
+
+    @BeforeEach
+    void setUp() {
+        Book book = new Book("1", "my book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
+        mt.save(book);
+    }
+
+    @DisplayName("найти книгу по Ид")
+    @Test
+    void findById() {
+        Optional<Book> optionalActualBook = repository.findById(BOOK_ID);
+        Book expectedBook = mt.findById(BOOK_ID, Book.class);
+
+        assertThat(optionalActualBook).isPresent().get().usingRecursiveComparison()
+                .ignoringCollectionOrder().isEqualTo(expectedBook);
+    }
 
     @DisplayName("добавить в Бд новую книгу")
     @Test
@@ -35,16 +52,6 @@ class BookRepositoryTest {
         assertThat(actualBook).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedBook);
 
         assertThat(savedBook).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedBook);
-    }
-
-    @DisplayName("найти книгу по Ид")
-    @Test
-    void findById() {
-        Optional<Book> optionalActualBook = repository.findById(BOOK_ID);
-        Book expectedBook = mt.findById(BOOK_ID, Book.class);
-
-        assertThat(optionalActualBook).isPresent().get().usingRecursiveComparison()
-                .ignoringCollectionOrder().isEqualTo(expectedBook);
     }
 
 }
