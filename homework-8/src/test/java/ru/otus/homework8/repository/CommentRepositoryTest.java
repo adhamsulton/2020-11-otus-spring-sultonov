@@ -31,11 +31,11 @@ class CommentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Book book = new Book(BOOK_ID, "new book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
-        mt.save(book);
+//        Book book = new Book(BOOK_ID, "new book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
+//        mt.save(book);
 
-        Comment expectedComment = Comment.builder().id(COMMENT_ID).text("new comment").createdOn(LocalDateTime.now().withNano(0)).book(book).build();
-        mt.save(expectedComment);
+//        Comment expectedComment = Comment.builder().id(COMMENT_ID).text("new comment").createdOn(LocalDateTime.now().withNano(0)).book(book).build();
+//        mt.save(expectedComment);
     }
 
     @DisplayName("добавить в Бд новый комментарий")

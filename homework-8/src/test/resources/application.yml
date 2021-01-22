@@ -1,4 +1,5 @@
-spring:
-  datasource:
-    initialization-mode: always
-    data: data.json
+mongock:
+  #  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.homework8.changelogs

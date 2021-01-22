@@ -2,3 +2,9 @@ spring:
   data:
     mongodb:
       database: lib
+
+mongock:
+  #  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.homework8.changelogs

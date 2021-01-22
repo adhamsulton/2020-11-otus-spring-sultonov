@@ -27,8 +27,8 @@ class BookRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Book book = new Book("1", "my book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
-        mt.save(book);
+//        Book book = new Book("1", "my book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
+//        mt.save(book);
     }
 
     @DisplayName("найти книгу по Ид")
