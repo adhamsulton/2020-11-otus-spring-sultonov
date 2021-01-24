@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework8.domain.Book;
-import ru.otus.homework8.domain.Comment;
 import ru.otus.homework8.repository.BookRepository;
 import ru.otus.homework8.repository.CommentRepository;
 
@@ -38,7 +37,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(String id) {
         repository.deleteById(id);
-        List<Comment> bookComments = commentRepository.findAllByBook_Id(id);
-        commentRepository.deleteAll(bookComments);
+        commentRepository.deleteAllByBook_Id(id);
     }
 }

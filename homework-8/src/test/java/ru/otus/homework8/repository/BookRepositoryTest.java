@@ -1,6 +1,5 @@
 package ru.otus.homework8.repository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,6 @@ class BookRepositoryTest {
     private BookRepository repository;
     @Autowired
     private MongoTemplate mt;
-
-    @BeforeEach
-    void setUp() {
-//        Book book = new Book("1", "my book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
-//        mt.save(book);
-    }
 
     @DisplayName("найти книгу по Ид")
     @Test

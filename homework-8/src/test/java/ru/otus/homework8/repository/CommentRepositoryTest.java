@@ -1,15 +1,11 @@
 package ru.otus.homework8.repository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import ru.otus.homework8.domain.Author;
-import ru.otus.homework8.domain.Book;
 import ru.otus.homework8.domain.Comment;
-import ru.otus.homework8.domain.Genre;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,15 +24,6 @@ class CommentRepositoryTest {
     private CommentRepository repository;
     @Autowired
     private MongoTemplate mt;
-
-    @BeforeEach
-    void setUp() {
-//        Book book = new Book(BOOK_ID, "new book", List.of(new Author("2", "Стивен Кинг")), new Genre("2", "Детектив"));
-//        mt.save(book);
-
-//        Comment expectedComment = Comment.builder().id(COMMENT_ID).text("new comment").createdOn(LocalDateTime.now().withNano(0)).book(book).build();
-//        mt.save(expectedComment);
-    }
 
     @DisplayName("добавить в Бд новый комментарий")
     @Test
