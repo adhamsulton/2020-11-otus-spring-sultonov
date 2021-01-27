@@ -54,8 +54,7 @@ class CommentRepositoryTest {
 
         Comment savedComment = repository.save(expectedComment);
         Comment actualComment = em.find(Comment.class, expectedComment.getId());
-        System.out.println(savedComment);
-        System.out.println(actualComment);
+
         assertThat(actualComment).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedComment);
 
         assertThat(savedComment).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedComment);
