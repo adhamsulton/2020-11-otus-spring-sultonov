@@ -1,7 +1,6 @@
 package ru.otus.homework9.service;
 
 import ru.otus.homework9.domain.Book;
-import ru.otus.homework9.dto.BookDto;
 
 import java.util.List;
 import java.util.Optional;

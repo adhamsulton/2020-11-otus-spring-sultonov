@@ -16,12 +16,11 @@
         <th scope="col">Жанр</th>
         <th scope="col">Авторы</th>
         <th scope="col">
-             <span>
-                <a th:href="@{/books/edit/0}" th:method="post">
-                    <i class="fa fa-plus-square fa-lg" style="color:#007bff; text-align: center;"
-                       aria-hidden="true"></i>
-                 </a>
-            </span>
+            <form th:method="GET" th:action="@{/books/edit/0}" class="pl-4">
+                <button class="btn btn-outline-success ml-2">
+                    <i class="fa fa-plus-square" style="text-align: center;" aria-hidden="true"></i>
+                </button>
+            </form>
         </th>
     </tr>
     </thead>
@@ -32,21 +31,23 @@
         <td th:text="${book.genre.name}">Book genre</td>
         <td th:text="${#strings.listJoin(book.authorList.![fullName], ', ')}">Book authors</td>
         <td>
-            <span>
-                <a th:href="@{/books/view/__${book.id}__}">
-                    <i class="fa fa-eye" style="color:#17a2b8; text-align: center;" aria-hidden="true"></i>
-                </a>
-            </span>
-            <span>
-                <a th:href="@{/books/edit/__${book.id}__}">
-                    <i class="fa fa-edit" style="color:#28a745; text-align: center;" aria-hidden="true"></i>
-                </a>
-            </span>
-            <span>
-                <a th:href="@{'/books/delete/{id}'(id=${book.id})}">
-                    <i class="fa fa-trash" style="color:#dc3545; text-align: center;" aria-hidden="true"></i>
-                </a>
-            </span>
+            <div class="row">
+                <form th:method="GET" th:action="@{/books/view/__${book.id}__}" class="pr-1">
+                    <button class="btn btn-outline-primary">
+                        <i class="fa fa-eye" style="text-align: center;" aria-hidden="true"></i>
+                    </button>
+                </form>
+                <form th:method="GET" th:action="@{/books/edit/__${book.id}__}" class="pr-1">
+                    <button class="btn btn-outline-success">
+                        <i class="fa fa-edit" style="text-align: center;" aria-hidden="true"></i>
+                    </button>
+                </form>
+                <form th:method="DELETE" th:action="@{'/books/delete/{id}'(id=${book.id})}">
+                    <button class="btn btn-outline-danger">
+                        <i class="fa fa-trash" style="text-align: center;" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
         </td>
     </tr>
     </tbody>

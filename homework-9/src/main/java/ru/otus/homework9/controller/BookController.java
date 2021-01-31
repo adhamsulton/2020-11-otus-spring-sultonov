@@ -3,10 +3,7 @@ package ru.otus.homework9.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.homework9.domain.Book;
 import ru.otus.homework9.service.AuthorService;
 import ru.otus.homework9.service.BookService;
@@ -25,14 +22,14 @@ public class BookController {
     @GetMapping
     public String getList(Model model) {
         model.addAttribute("books", bookService.findAll());
-        return "bookList";
+        return "book-list";
     }
 
     @GetMapping("/view/{id}")
     public String view(@PathVariable("id") Long id, Model model) {
         model.addAttribute("book", bookService.findById(id).orElse(new Book()));
         model.addAttribute("comments", commentService.findAllBookComments(id));
-        return "view";
+        return "book-view";
     }
 
     @GetMapping("/edit/{id}")
@@ -40,16 +37,16 @@ public class BookController {
         model.addAttribute("book", bookService.findById(id).orElse(new Book()));
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("authors", authorService.findAll());
-        return "addEdit";
+        return "book-add-edit";
     }
 
-    @PostMapping("/edit")
-    public String edit(Book book) {
+    @PostMapping("/save")
+    public String save(Book book) {
         bookService.save(book);
         return "redirect:/books";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         bookService.delete(id);
         return "redirect:/books";
