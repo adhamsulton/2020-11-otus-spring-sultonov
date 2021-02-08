@@ -34,7 +34,6 @@ public class BookController {
 
     @PostMapping("/save")
     public Book save(@RequestBody BookDto bookDto) {
-        System.out.println(bookDto);
         return bookService.save(bookDto);
     }
 
