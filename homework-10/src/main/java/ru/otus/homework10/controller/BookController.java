@@ -23,39 +23,6 @@ public class BookController {
     private final AuthorService authorService;
     private final CommentService commentService;
 
-//    private List<BookObj> list = new ArrayList<>(){{add(new BookObj(0, "namenamename", new Genre(1L, "detectiv")));}};
-//    private Long id = 1L;
-//    @GetMapping
-//    public List<BookObj> fetch() {
-//        System.out.println(list);
-//        return list;
-//    }
-//
-//    @GetMapping("/{id}")
-//    public BookObj get(@PathVariable("id") Long id) {
-//         return list.get(Math.toIntExact(id));
-//    }
-//
-//    @PostMapping("/save")
-//    public BookObj save(@RequestBody BookObj book) {
-//        System.out.println("book");
-//        System.out.println(book);
-//        if (book.getId() == null){
-//            book.setId(Math.toIntExact(id++));
-//            list.add(book);
-//        } else {
-//            BookObj bookObj = list.get(book.getId());
-//            bookObj.setName(book.getName());
-//
-//        }
-//        return book;
-//    }
-//    @DeleteMapping("/{id}")
-//    public void delete(@PathVariable("id") Long id) {
-//        list.remove(Math.toIntExact(id));
-//    }
-//
-
     @GetMapping
     public List<Book> fetch() {
         return bookService.findAll();
