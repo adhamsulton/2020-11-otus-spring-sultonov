@@ -19,4 +19,8 @@ public class Author {
     @Id
     private Long id;
     private String fullName;
+
+    public Author(Long id) {
+        this.id = id;
+    }
 }
