@@ -10,7 +10,7 @@ import ru.otus.homework11.domain.Book;
 @DataMongoTest
 class BookControllerTest {
     @Autowired
-    RouterFunction routerFunction;
+    private RouterFunction routerFunction;
 
     @Test
     void fetch() {
@@ -39,4 +39,29 @@ class BookControllerTest {
                 .isOk();
     }
 
+    @Test
+    void get() {
+        WebTestClient client = WebTestClient
+                .bindToRouterFunction(routerFunction)
+                .build();
+
+        client.get()
+                .uri("/fe/books/1")
+                .exchange()
+                .expectStatus()
+                .isOk();
+    }
+
+    @Test
+    void delete() {
+        WebTestClient client = WebTestClient
+                .bindToRouterFunction(routerFunction)
+                .build();
+
+        client.delete()
+                .uri("/fe/books/1")
+                .exchange()
+                .expectStatus()
+                .isOk();
+    }
 }
