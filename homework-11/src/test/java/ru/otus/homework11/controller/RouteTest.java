@@ -3,14 +3,16 @@ package ru.otus.homework11.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import ru.otus.homework11.domain.Book;
 
-@DataMongoTest
-class BookControllerTest {
+@SpringBootTest
+class RouteTest {
     @Autowired
-    private RouterFunction routerFunction;
+    private RouterFunction<ServerResponse> routerFunction;
 
     @Test
     void fetch() {
