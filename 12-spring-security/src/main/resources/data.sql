@@ -1,7 +1,7 @@
 insert into roles(id, name)
 values (1, 'ADMIN');
 insert into users(id, username, password)
-values (1, 'admin', '$2y$12$iwb5ZDNnT.tivD8gVYxvdurgK0t1KsvXoSNt9swi7.2/V0vemmIya');
+values (1, 'admin', '$2y$12$W.Fs2tS5iHnbVpEuAfYj.u2lVAFEyT/NM02SuBkXG.YLvxgP23pQK');
 insert into user_roles(user_id, role_id)
 values (1, 1);
 
