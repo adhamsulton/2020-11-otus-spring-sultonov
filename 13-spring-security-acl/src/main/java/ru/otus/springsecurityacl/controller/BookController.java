@@ -33,7 +33,7 @@ public class BookController {
         return "book-view";
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_OWNER"})
     @GetMapping("/books/edit/{id}")
     public String editPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("book", bookService.findById(id).orElse(new Book()));
@@ -42,14 +42,14 @@ public class BookController {
         return "book-add-edit";
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping("/books")
     public String save(Book book) {
         bookService.save(book);
         return "redirect:/books";
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_OWNER"})
     @DeleteMapping("/books/{id}")
     public String delete(@PathVariable("id") Long id) {
         bookService.delete(id);

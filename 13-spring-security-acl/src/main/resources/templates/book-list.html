@@ -38,12 +38,12 @@
                         <i class="fa fa-eye" style="text-align: center;" aria-hidden="true"></i>
                     </button>
                 </form>
-                <form sec:authorize="hasRole('ADMIN')" th:method="GET" th:action="@{/books/edit/__${book.id}__}" class="pr-1">
+                <form sec:authorize="hasRole('ADMIN') || hasRole('OWNER')" th:method="GET" th:action="@{/books/edit/__${book.id}__}" class="pr-1">
                     <button class="btn btn-outline-success">
                         <i class="fa fa-edit" style="text-align: center;" aria-hidden="true"></i>
                     </button>
                 </form>
-                <form sec:authorize="hasRole('ADMIN')" th:method="DELETE" th:action="@{'/books/{id}'(id=${book.id})}">
+                <form sec:authorize="hasRole('ADMIN') || hasRole('OWNER')" th:method="DELETE" th:action="@{'/books/{id}'(id=${book.id})}">
                     <button class="btn btn-outline-danger">
                         <i class="fa fa-trash" style="text-align: center;" aria-hidden="true"></i>
                     </button>
