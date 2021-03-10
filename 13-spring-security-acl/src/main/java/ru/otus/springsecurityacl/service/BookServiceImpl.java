@@ -1,6 +1,8 @@
 package ru.otus.springsecurityacl.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.PrincipalSid;
@@ -24,6 +26,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository repository;
     private final MutableAclService mutableAclService;
 
+    @PostFilter("hasPermission(filterObject, 'READ')")
     @Transactional(readOnly = true)
     @Override
     public List<Book> findAll() {
@@ -36,6 +39,7 @@ public class BookServiceImpl implements BookService {
         return repository.findById(id);
     }
 
+    @PreAuthorize("#book.id != null ? hasPermission(#book, 'WRITE') : hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
     public void save(Book book) {
@@ -53,6 +57,7 @@ public class BookServiceImpl implements BookService {
         mutableAclService.updateAcl(acl);
     }
 
+    @PreAuthorize("hasPermission(#id, 'ru.otus.springsecurityacl.domain.Book', 'DELETE')")
     @Transactional
     @Override
     public void delete(Long id) {
