@@ -10,8 +10,6 @@ public class BookConvertServiceImpl implements BookConvertService {
 
     @Override
     public BookDocument convert(Book book) {
-        System.out.println("1111111111");
-        System.out.println(book);
         ModelMapper mapper = new ModelMapper();
         return mapper.map(book, BookDocument.class);
     }

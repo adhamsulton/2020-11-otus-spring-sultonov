@@ -21,13 +21,12 @@ import ru.otus.springbatch.domain.sql.Book;
 import ru.otus.springbatch.repository.nosql.BookDocumentRepository;
 import ru.otus.springbatch.repository.sql.BookRepository;
 import ru.otus.springbatch.service.BookConvertService;
-import ru.otus.springbatch.service.BookConvertServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
-//@SuppressWarnings("all")
+@SuppressWarnings("all")
 @EnableBatchProcessing
 @Configuration
 public class JobConfig {

@@ -18,6 +18,6 @@ public class BookDocument {
     @Id
     private String id;
     private String name;
-    private List<AuthorDocument> authorDocumentList;
-    private GenreDocument genreDocument;
+    private List<AuthorDocument> authorList;
+    private GenreDocument genre;
 }

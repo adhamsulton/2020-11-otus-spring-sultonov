@@ -20,6 +20,6 @@ public class CommentDocument {
     private String id;
     private String text;
     private LocalDateTime createdOn;
-//    @DBRef
-//    private BookDocument bookDocument;
+    @DBRef
+    private BookDocument book;
 }
