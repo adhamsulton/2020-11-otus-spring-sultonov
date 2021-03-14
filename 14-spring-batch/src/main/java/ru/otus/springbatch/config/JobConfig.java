@@ -31,7 +31,7 @@ import java.util.List;
 @Configuration
 public class JobConfig {
     private static final int CHUNK_SIZE = 5;
-    private static final String IMPORT_BOOK_JOB = "importBookJob";
+    public static final String IMPORT_BOOK_JOB = "importBookJob";
 
     @Autowired
     private BookRepository bookRepository;
