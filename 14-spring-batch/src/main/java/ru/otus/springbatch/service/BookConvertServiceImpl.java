@@ -11,6 +11,8 @@ public class BookConvertServiceImpl implements BookConvertService {
     @Override
     public BookDocument convert(Book book) {
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(book, BookDocument.class);
+        BookDocument bookDocument = mapper.map(book, BookDocument.class);
+        bookDocument.setId(null);
+        return bookDocument;
     }
 }

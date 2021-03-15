@@ -32,7 +32,7 @@ public class Book {
     private Genre genre;
     @ToString.Exclude
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> commentList;
 
 }

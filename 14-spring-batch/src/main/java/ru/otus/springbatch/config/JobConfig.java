@@ -10,15 +10,15 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.RepositoryItemReader;
-import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
-import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.otus.springbatch.batch.BookDocumentRepositoryItemWriter;
 import ru.otus.springbatch.domain.nosql.BookDocument;
 import ru.otus.springbatch.domain.sql.Book;
 import ru.otus.springbatch.repository.nosql.BookDocumentRepository;
+import ru.otus.springbatch.repository.nosql.CommentDocumentRepository;
 import ru.otus.springbatch.repository.sql.BookRepository;
 import ru.otus.springbatch.service.BookConvertService;
 
@@ -63,10 +63,9 @@ public class JobConfig {
 
     @StepScope
     @Bean
-    public RepositoryItemWriter<BookDocument> writer() {
-        return new RepositoryItemWriterBuilder<BookDocument>()
-                .repository(bookDocumentRepository)
-                .build();
+    public BookDocumentRepositoryItemWriter writer(BookDocumentRepository bookDocumentRepository,
+                                                   CommentDocumentRepository commentDocumentRepository) {
+        return new BookDocumentRepositoryItemWriter(bookDocumentRepository, commentDocumentRepository);
     }
 
     @Bean
@@ -90,7 +89,7 @@ public class JobConfig {
     }
 
     @Bean
-    public Step step1(RepositoryItemWriter<BookDocument> writer, RepositoryItemReader<Book> reader, ItemProcessor<Book, BookDocument> itemProcessor) {
+    public Step step1(BookDocumentRepositoryItemWriter<BookDocument> writer, RepositoryItemReader<Book> reader, ItemProcessor<Book, BookDocument> itemProcessor) {
         return stepBuilderFactory.get("step1")
                 .<Book, BookDocument>chunk(CHUNK_SIZE)
                 .reader(reader)
