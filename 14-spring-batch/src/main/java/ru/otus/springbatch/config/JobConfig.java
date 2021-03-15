@@ -89,7 +89,7 @@ public class JobConfig {
     }
 
     @Bean
-    public Step step1(BookDocumentRepositoryItemWriter<BookDocument> writer, RepositoryItemReader<Book> reader, ItemProcessor<Book, BookDocument> itemProcessor) {
+    public Step importBooksStep(BookDocumentRepositoryItemWriter<BookDocument> writer, RepositoryItemReader<Book> reader, ItemProcessor<Book, BookDocument> itemProcessor) {
         return stepBuilderFactory.get("step1")
                 .<Book, BookDocument>chunk(CHUNK_SIZE)
                 .reader(reader)
