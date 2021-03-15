@@ -10,10 +10,12 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.RepositoryItemReader;
+import org.springframework.batch.item.data.builder.MongoItemWriterBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoOperations;
 import ru.otus.springbatch.batch.BookDocumentRepositoryItemWriter;
 import ru.otus.springbatch.domain.nosql.BookDocument;
 import ru.otus.springbatch.domain.sql.Book;
@@ -63,9 +65,8 @@ public class JobConfig {
 
     @StepScope
     @Bean
-    public BookDocumentRepositoryItemWriter writer(BookDocumentRepository bookDocumentRepository,
-                                                   CommentDocumentRepository commentDocumentRepository) {
-        return new BookDocumentRepositoryItemWriter(bookDocumentRepository, commentDocumentRepository);
+    public BookDocumentRepositoryItemWriter writer(MongoOperations template) {
+        return new BookDocumentRepositoryItemWriter(template);
     }
 
     @Bean
