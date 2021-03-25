@@ -24,3 +24,6 @@ management:
   health:
     defaults:
       enabled: true
+logging:
+  file:
+    name: ./logs/spring-micro-service/spring-micro-service.log
