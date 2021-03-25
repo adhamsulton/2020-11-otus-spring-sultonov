@@ -10,6 +10,7 @@ import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.scheduling.PollerMetadata;
+import ru.otus.springintegration.service.LogService;
 
 @Configuration
 @EnableIntegration
@@ -21,9 +22,9 @@ public class IntegrationConfig {
     }
 
     @Bean
-    public IntegrationFlow logFlow() {
+    public IntegrationFlow logFlow(LogService logService) {
         return IntegrationFlows.from("logsChannel")
-                .handle("logService", "log")
+                .handle(logService, "log")
                 .get();
     }
 
