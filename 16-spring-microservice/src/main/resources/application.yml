@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:libdb
+    initialization-mode: always
+  h2:
+    console:
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    #    show_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  health:
+    defaults:
+      enabled: true
+logging:
+  file:
+    name: ./logs/spring-micro-service/spring-micro-service.log
