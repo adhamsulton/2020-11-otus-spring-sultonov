@@ -1,25 +1,19 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:libdb
+    url: jdbc:postgresql://localhost:5432/libdb
     initialization-mode: always
-  h2:
-    console:
-      path: /h2-console
-      settings:
-        web-allow-others: true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
-#    show_sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-  #        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
   mvc:
     hiddenmethod:
       filter:
         enabled: true
-
-
-#server:
-#  address: 8080
