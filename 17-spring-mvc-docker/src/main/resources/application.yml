@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/libdb
+    url: ${DB_URL}
     initialization-mode: always
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
