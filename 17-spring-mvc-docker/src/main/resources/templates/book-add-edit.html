@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns: xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>List of all books</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet"
+          type="text/css"/>
+</head>
+<body>
+<form id="edit-form" action="addEdit.html" th:object=${book}
+      th:action="@{/books/save(id=${book.id})}" th:method="post">
+    <input id="id-input" type="text" readonly="readonly" th:value=*{id} value="1" hidden/>
+
+    <div class="form-group col-md-8">
+        <label for="name-input">Название<span style="color:red;">*</span></label>
+        <input id="name-input" type="text" name="name" class="form-control" placeholder="Введите название" required
+               th:value=*{name} value="Name"/>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="inputGenre">Жанр<span style="color:red;">*</span></label>
+        <select id="inputGenre" name="genre" title="Выберите жанр..." class="form-control" required>
+            <option value="" disabled selected>Выберите жанр...</option>
+            <option th:each="genre :${genres}" th:value="${genre.id}" th:text="${genre.name}"
+                    th:selected="${genre.id == book?.genre?.id}">Choose...
+            </option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="inputAuthor">Автор</label>
+        <select id="inputAuthor" name="authorList" class="form-control" multiple>
+            <option th:each="author :${authors}" th:value="${author.id}" th:text="${author.fullName}"
+                    th:selected="${book?.authorList?.contains(author)}">Choose...
+            </option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+</body>
+<script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
+</html>
