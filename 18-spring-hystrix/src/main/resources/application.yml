@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    initialization-mode: always
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+hystrix:
+  dashboard:
+    proxy-stream-allow-list: "*"
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      base-path: /actuator
+      cors:
+        allowed-origins: true
+      exposure:
+        include: '*'
