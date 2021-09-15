@@ -6,8 +6,10 @@ import ru.otus.springwebflux.domain.Author;
 import ru.otus.springwebflux.domain.Book;
 import ru.otus.springwebflux.domain.Comment;
 import ru.otus.springwebflux.domain.Genre;
+import ru.otus.springwebflux.repository.AuthorRepository;
 import ru.otus.springwebflux.repository.BookRepository;
 import ru.otus.springwebflux.repository.CommentRepository;
+import ru.otus.springwebflux.repository.GenreRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +23,17 @@ public class InitMongoDBDataChangeLog {
         repository.save(book).block();
     }
 
-    @ChangeSet(order = "002", id = "initComment", author = "admin", runAlways = true)
+    @ChangeSet(order = "002", id = "initGenre", author = "admin", runAlways = true)
+    public void initGenre(GenreRepository repository) {
+        repository.save(new Genre("2", "Детектив")).block();
+    }
+
+    @ChangeSet(order = "003", id = "initAuthor", author = "admin", runAlways = true)
+    public void initAuthor(AuthorRepository repository) {
+        repository.save(new Author("2", "Стивен Кинг")).block();
+    }
+
+    @ChangeSet(order = "004", id = "initComment", author = "admin", runAlways = true)
     public void initComments(CommentRepository repository) {
         Comment expectedComment = Comment.builder().id("1").text("new comment").createdOn(LocalDateTime.now().withNano(0)).book(book).build();
         repository.save(expectedComment).block();
