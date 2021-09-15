@@ -1,1 +1,18 @@
-
+spring:
+  data:
+    mongodb:
+      database: lib
+  jpa:
+    properties:
+      hibernate:
+        ogm:
+          datastore:
+            create_database: true
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+mongock:
+  #  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.springwebflux.changelogs
